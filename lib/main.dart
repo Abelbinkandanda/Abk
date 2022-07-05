@@ -1,4 +1,5 @@
-import 'package:app/Screens/Guest/Auth.dart';
+import 'package:app/Screens/Guest.dart';
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(App());
@@ -9,8 +10,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'abk',
-      home: AuthScreen(),
+      title: 'Flutter Demo',
+      home: GuestScreen(),
     );
   }
 }

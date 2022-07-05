@@ -2,13 +2,31 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 
 class TermScreen extends StatefulWidget {
-  TermScreen({Key? key}) : super(key: key);
+  final Function(int) onChangedStep;
+  const TermScreen({Key? key, required this.onChangedStep}) : super(key: key);
 
   @override
   State<TermScreen> createState() => _TermScreenState();
 }
 
 class _TermScreenState extends State<TermScreen> {
+  late ScrollController _scrollController;
+  bool _termsReaded = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollController = ScrollController();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        setState(() => _termsReaded = true);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,7 +42,7 @@ class _TermScreenState extends State<TermScreen> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               color: Colors.black,
-              onPressed: () {},
+              onPressed: () => widget.onChangedStep(0),
             ),
           ),
           body: Padding(
@@ -38,6 +56,7 @@ class _TermScreenState extends State<TermScreen> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,7 +95,8 @@ class _TermScreenState extends State<TermScreen> {
                   ),
                   RaisedButton(
                     padding: EdgeInsets.symmetric(vertical: 15.0),
-                    onPressed: () => print('accept'),
+                    onPressed:
+                        !_termsReaded ? null : () => widget.onChangedStep(2),
                     color: Theme.of(context).primaryColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
